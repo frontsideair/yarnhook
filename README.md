@@ -25,3 +25,14 @@ You should let `yarnhook` handle git hooks that change the dependencies. Example
   }
 }
 ```
+
+# Flags
+
+Prepend `YARNHOOK_BYPASS=true` to your git command if you don't want to run
+`yarn install` as a result, `YARNHOOK_BYPASS=true` to print debug information.
+
+An example:
+
+```sh
+YARNHOOK_BYPASS=true git checkout feature-branch
+```
