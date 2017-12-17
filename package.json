@@ -1,7 +1,8 @@
 {
   "name": "yarnhook",
   "version": "0.0.1",
-  "main": "index.js",
+  "bin": "index.js",
+  "files": ["index.js"],
   "author": "Fatih Altinok <photonia@gmail.com>",
   "license": "MIT",
   "dependencies": {
