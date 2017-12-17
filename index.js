@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // @flow
 
 const findParentDir = require("find-parent-dir");
