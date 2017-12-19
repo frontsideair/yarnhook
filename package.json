@@ -1,5 +1,5 @@
 {
-  "name": "yarnhook",
+  "name": "lockfilehook",
   "version": "0.0.2",
   "bin": "index.js",
   "files": [

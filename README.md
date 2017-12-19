@@ -1,6 +1,6 @@
-# yarnhook [![npm version](https://badge.fury.io/js/yarnhook.svg)](https://badge.fury.io/js/yarnhook)
+# lockfilehook [![npm version](https://badge.fury.io/js/lockfilehook.svg)](https://badge.fury.io/js/lockfilehook)
 
-`yarnhook` keeps your `node_modules` up-to-date when your `yarn.lock` changes
+`lockfilehook` keeps your `node_modules` up-to-date when your `yarn.lock` or `package-lock.json` changes
 due to git operations like `checkout`, `merge`, `rebase`, `pull` etc.
 
 # Installation
@@ -8,31 +8,33 @@ due to git operations like `checkout`, `merge`, `rebase`, `pull` etc.
 This package should be used with [husky](https://www.npmjs.com/package/husky).
 
 ```sh
-yarn add --dev yarnhook husky
+yarn add --dev lockfilehook husky
+# or 
+npm install --save-dev lockfilehook husky
 ```
 
 # Usage
 
-You should let `yarnhook` handle git hooks that change the dependencies. Example
+You should let `lockfilehook` handle git hooks that change the dependencies. Example
 `package.json` is as follows:
 
 ```json
 {
   "scripts": {
-    "postmerge": "yarnhook",
-    "postcheckout": "yarnhook",
-    "postrewrite": "yarnhook"
+    "postmerge": "lockfilehook",
+    "postcheckout": "lockfilehook",
+    "postrewrite": "lockfilehook"
   }
 }
 ```
 
 # Flags
 
-Prepend `YARNHOOK_BYPASS=true` to your git command if you don't want to run
-`yarn install` as a result, `YARNHOOK_DEBUG=true` to print debug information.
+Prepend `LOCKFILEHOOK_BYPASS=true` to your git command if you don't want to run
+`[yarn|npm] install` as a result, `LOCKFILEHOOK_DEBUG=true` to print debug information.
 
 An example:
 
 ```sh
-YARNHOOK_BYPASS=true git checkout feature-branch
+LOCKFILEHOOK_BYPASS=true git checkout feature-branch
 ```
