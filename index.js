@@ -7,9 +7,9 @@ const { execSync } = require("child_process");
 const { join } = require("path");
 const fs = require("fs");
 
-const { LOCKFILEHOOK_BYPASS = false, LOCKFILEHOOK_DEBUG = false } = process.env;
+const { YARNHOOK_BYPASS = false, YARNHOOK_DEBUG = false } = process.env;
 
-if (!LOCKFILEHOOK_BYPASS) {
+if (!YARNHOOK_BYPASS) {
   // switch to gitdir
   const currentDir = process.cwd();
   const gitDir = findParentDir.sync(currentDir, ".git");
@@ -36,7 +36,7 @@ if (!LOCKFILEHOOK_BYPASS) {
 
   const lockfile = getLockfile();
 
-  if (LOCKFILEHOOK_DEBUG) {
+  if (YARNHOOK_DEBUG) {
     console.log("currentDir:", currentDir);
     console.log("gitDir:", gitDir);
     console.log("lockfile:", lockfile);
@@ -49,7 +49,7 @@ if (!LOCKFILEHOOK_BYPASS) {
     encoding: "utf-8"
   });
 
-  if (LOCKFILEHOOK_DEBUG) {
+  if (YARNHOOK_DEBUG) {
     console.log(output, output.length > 0);
   }
 
