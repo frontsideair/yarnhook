@@ -5,7 +5,7 @@
 const findParentDir = require("find-parent-dir");
 const { execSync } = require("child_process");
 const { join } = require("path");
-const fs = require('fs');
+const fs = require("fs");
 
 const { LOCKFILEHOOK_BYPASS = false, LOCKFILEHOOK_DEBUG = false } = process.env;
 
@@ -32,15 +32,15 @@ if (!LOCKFILEHOOK_BYPASS) {
     }
 
     return null;
-  }
+  };
 
   const lockfile = getLockfile();
 
   if (LOCKFILEHOOK_DEBUG) {
-    console.log('currentDir:', currentDir);
-    console.log('gitDir:', gitDir);
-    console.log('lockfile:', lockfile);
-    console.log('CMD:', CMD);
+    console.log("currentDir:", currentDir);
+    console.log("gitDir:", gitDir);
+    console.log("lockfile:", lockfile);
+    console.log("CMD:", CMD);
   }
 
   // run a git diff on the lockfile
