@@ -43,20 +43,28 @@ if (!YARNHOOK_BYPASS) {
     console.log("CMD:", CMD);
   }
 
-  // run a git diff on the lockfile
-  const output = execSync(`git diff HEAD@{1}..HEAD@{0} -- ${lockfile}`, {
-    cwd: gitDir,
-    encoding: "utf-8"
-  });
+  if (lockfile !== null) {
+    // run a git diff on the lockfile
+    const output = execSync(`git diff HEAD@{1}..HEAD@{0} -- ${lockfile}`, {
+      cwd: gitDir,
+      encoding: "utf-8"
+    });
 
-  if (YARNHOOK_DEBUG) {
-    console.log(output, output.length > 0);
-  }
+    if (YARNHOOK_DEBUG) {
+      console.log(output, output.length > 0);
+    }
 
-  // if diff exists, update dependencies
-  if (output.length > 0) {
-    console.log(`Changes to lockfile found, running \`${CMD} install\``);
-    const output = execSync(`${CMD} install`, { encoding: "utf-8" });
-    console.log(output);
+    // if diff exists, update dependencies
+    if (output.length > 0) {
+      console.log(`Changes to lockfile found, running \`${CMD} install\``);
+      const output = execSync(`${CMD} install`, { encoding: "utf-8" });
+      console.log(output);
+    }
+  } else {
+    console.log(
+      "I can't seem to find either yarn.lock or package-lock.json. Please " +
+        "open an issue at https://github.com/frontsideair/yarnhook/issues if " +
+        "you think it's my fault."
+    );
   }
 }
