@@ -1,6 +1,6 @@
 # yarnhook [![npm version](https://badge.fury.io/js/yarnhook.svg)](https://badge.fury.io/js/yarnhook)
 
-`yarnhook` keeps your `node_modules` up-to-date when your `yarn.lock` changes
+`yarnhook` keeps your `node_modules` up-to-date when your `yarn.lock` or `package-lock.json` changes
 due to git operations like `checkout`, `merge`, `rebase`, `pull` etc.
 
 # Installation
@@ -9,6 +9,8 @@ This package should be used with [husky](https://www.npmjs.com/package/husky).
 
 ```sh
 yarn add --dev yarnhook husky
+# or 
+npm install --save-dev yarnhook husky
 ```
 
 # Usage
@@ -29,7 +31,7 @@ You should let `yarnhook` handle git hooks that change the dependencies. Example
 # Flags
 
 Prepend `YARNHOOK_BYPASS=true` to your git command if you don't want to run
-`yarn install` as a result, `YARNHOOK_DEBUG=true` to print debug information.
+`yarn install` or `npm install` as a result, `YARNHOOK_DEBUG=true` to print debug information.
 
 An example:
 
