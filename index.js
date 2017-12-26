@@ -3,7 +3,7 @@
 // @flow
 
 const findParentDir = require("find-parent-dir");
-const { execSync } = require("child_process");
+const execa = require("execa");
 const { join } = require("path");
 const fs = require("fs");
 
@@ -43,12 +43,13 @@ if (!YARNHOOK_BYPASS) {
     console.log("CMD:", CMD);
   }
 
-  if (lockfile !== null) {
+  if (lockfile) {
     // run a git diff on the lockfile
-    const output = execSync(`git diff HEAD@{1}..HEAD@{0} -- ${lockfile}`, {
-      cwd: gitDir,
-      encoding: "utf-8"
-    });
+    const { stdout: output } = execa.sync(
+      "git",
+      ["diff", "HEAD@{1}..HEAD@{0}", "--", lockfile],
+      { cwd: gitDir }
+    );
 
     if (YARNHOOK_DEBUG) {
       console.log(output, output.length > 0);
@@ -57,8 +58,7 @@ if (!YARNHOOK_BYPASS) {
     // if diff exists, update dependencies
     if (output.length > 0) {
       console.log(`Changes to lockfile found, running \`${CMD} install\``);
-      const output = execSync(`${CMD} install`, { encoding: "utf-8" });
-      console.log(output);
+      execa.sync(CMD, ["install"], { stdio: "inherit" });
     }
   } else {
     console.log(
