@@ -43,13 +43,11 @@ if (!YARNHOOK_BYPASS) {
     console.log("CMD:", CMD);
   }
 
-  if (lockfile) {
+  if (lockfile !== null) {
     // run a git diff on the lockfile
-    const { stdout: output } = execa.sync(
-      "git",
-      ["diff", "HEAD@{1}..HEAD@{0}", "--", lockfile],
-      { cwd: gitDir }
-    );
+    const { stdout: output } = execa.sync("git", ["diff", "HEAD@{1}..HEAD@{0}", "--", lockfile], {
+      cwd: gitDir
+    });
 
     if (YARNHOOK_DEBUG) {
       console.log(output, output.length > 0);
