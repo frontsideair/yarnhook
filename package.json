@@ -2,9 +2,7 @@
   "name": "yarnhook",
   "version": "0.1.0",
   "bin": "index.js",
-  "files": [
-    "index.js"
-  ],
+  "files": ["index.js"],
   "author": "Fatih Altinok <photonia@gmail.com>",
   "license": "MIT",
   "dependencies": {
@@ -13,6 +11,25 @@
   },
   "devDependencies": {
     "flow-bin": "^0.61.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
     "prettier": "^1.9.2"
+  },
+  "scripts": {
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
+  },
+  "prettier": {
+    "printWidth": 100,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": false,
+    "bracketSpacing": true,
+    "trailingComma": "none",
+    "arrowParens": "avoid",
+    "proseWrap": "always"
   }
 }
