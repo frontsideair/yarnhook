@@ -6,6 +6,7 @@
   "author": "Fatih Altinok <photonia@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "execa": "^0.8.0",
     "find-parent-dir": "^0.3.0"
   },
   "devDependencies": {
