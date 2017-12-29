@@ -1,5 +1,7 @@
 # yarnhook [![npm version](https://badge.fury.io/js/yarnhook.svg)](https://badge.fury.io/js/yarnhook)
 
+![yarnhook](/logo.svg)
+
 `yarnhook` keeps your `node_modules` up-to-date when your `yarn.lock` or `package-lock.json` changes
 due to git operations like `checkout`, `merge`, `rebase`, `pull` etc.
 
