@@ -40,3 +40,7 @@ An example:
 ```sh
 YARNHOOK_BYPASS=true git checkout feature-branch
 ```
+
+# Artwork
+
+Project logo: @anilkilic Font: PT Sans
