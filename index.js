@@ -15,6 +15,7 @@ if (!YARNHOOK_BYPASS) {
   const gitDir = findParentDir.sync(currentDir, ".git");
   const yarnLockPath = join(currentDir, "yarn.lock");
   const npmLockPath = join(currentDir, "package-lock.json");
+  const pnpmLockPath = join(currentDir, "shrinkwrap.yaml");
 
   // check for yarn's and npm's lockfiles
   let CMD = "";
@@ -29,6 +30,12 @@ if (!YARNHOOK_BYPASS) {
     if (fs.existsSync(npmLockPath)) {
       CMD = "npm";
       return npmLockPath;
+    }
+
+    // get pnpm's lockfile
+    if (fs.existsSync(pnpmLockPath)) {
+      CMD = "pnpm";
+      return pnpmLockPath;
     }
 
     return null;
@@ -60,7 +67,7 @@ if (!YARNHOOK_BYPASS) {
     }
   } else {
     console.log(
-      "I can't seem to find either yarn.lock or package-lock.json. Please " +
+      "I can't seem to find a lockfile. Currently supported lockfiles are: yarn.lock, package-lock.json and shrinkwrap.yaml. Please " +
         "open an issue at https://github.com/frontsideair/yarnhook/issues if " +
         "you think it's my fault."
     );
