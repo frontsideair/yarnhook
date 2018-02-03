@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "bin": "index.js",
   "files": ["index.js"],
+  "repository": "frontsideair/yarnhook",
   "author": "Fatih Altinok <photonia@gmail.com>",
   "license": "MIT",
   "dependencies": {
