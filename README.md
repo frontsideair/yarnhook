@@ -32,8 +32,11 @@ as follows:
 
 # Flags
 
-Prepend `YARNHOOK_BYPASS=true` to your git command if you don't want to run `yarn install` or
-`npm install` as a result, `YARNHOOK_DEBUG=true` to print debug information.
+Prepend these flags to your git command to use them.
+
+* `YARNHOOK_BYPASS`: Run git command bypassing yarnhook completely
+* `YARNHOOK_DEBUG`: Print debug information
+* `YARNHOOK_DRYRUN`: Don't install dependencies, only notify
 
 An example:
 

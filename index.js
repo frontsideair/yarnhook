@@ -7,7 +7,7 @@ const execa = require("execa");
 const { join } = require("path");
 const fs = require("fs");
 
-const { YARNHOOK_BYPASS = false, YARNHOOK_DEBUG = false } = process.env;
+const { YARNHOOK_BYPASS = false, YARNHOOK_DEBUG = false, YARNHOOK_DRYRUN = false } = process.env;
 
 if (!YARNHOOK_BYPASS) {
   // switch to gitdir
@@ -62,8 +62,14 @@ if (!YARNHOOK_BYPASS) {
 
     // if diff exists, update dependencies
     if (output.length > 0) {
-      console.log(`Changes to lockfile found, running \`${CMD} install\``);
-      execa.sync(CMD, ["install"], { stdio: "inherit" });
+      if (YARNHOOK_DRYRUN) {
+        console.log(
+          `Changes to lockfile found, you should run \`${CMD} install\` if you want to have dependencies of this branch.`
+        );
+      } else {
+        console.log(`Changes to lockfile found, running \`${CMD} install\``);
+        execa.sync(CMD, ["install"], { stdio: "inherit" });
+      }
     }
   } else {
     console.log(
