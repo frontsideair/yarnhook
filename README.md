@@ -2,8 +2,8 @@
 
 ![yarnhook](/logo.svg)
 
-`yarnhook` keeps your `node_modules` up-to-date when your `yarn.lock` or `package-lock.json` changes
-due to git operations like `checkout`, `merge`, `rebase`, `pull` etc.
+`yarnhook` keeps your `node_modules` up-to-date when your `yarn.lock`, `package-lock.json` or
+`shrinkwrap.yaml` changes due to git operations like `checkout`, `merge`, `rebase`, `pull` etc.
 
 # Installation
 
@@ -13,6 +13,8 @@ This package should be used with [husky](https://www.npmjs.com/package/husky).
 yarn add --dev yarnhook husky
 # or
 npm install --save-dev yarnhook husky
+# or
+pnpm install --save-dev yarnhook rusty
 ```
 
 # Usage
