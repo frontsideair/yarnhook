@@ -13,6 +13,7 @@ const { YARNHOOK_BYPASS = false, YARNHOOK_DEBUG = false, YARNHOOK_DRYRUN = false
 // supported package managers and lockfile names
 const lockfileSpecs = [
   ["yarn", "yarn.lock"],
+  ["npm", "npm-shrinkwrap.json"],
   ["npm", "package-lock.json"],
   ["pnpm", "shrinkwrap.yaml"]
 ];
