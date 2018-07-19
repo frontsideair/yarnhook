@@ -66,7 +66,12 @@ if (!YARNHOOK_BYPASS) {
         );
       } else {
         console.log(`Changes to lockfile found, running \`${cmd} install\``);
-        execa.sync(cmd, ["install"], { stdio: "inherit" });
+
+        try {
+          execa.sync(CMD, ["install"], { stdio: "inherit" });
+        } catch (err) {
+          console.warn(`Running ${CMD} install failed`);
+        }
       }
     }
   } else {
