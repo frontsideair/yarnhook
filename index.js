@@ -18,6 +18,12 @@ const lockfileSpecs = [
   ["pnpm", "shrinkwrap.yaml"]
 ];
 
+const args = {
+  yarn: ["install", "--prefer-offline", "--pure-lockfile"],
+  npm: ["install", "--prefer-offline", "--no-audit"],
+  pnpm: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap"]
+};
+
 function getLockfileSpec(currentDir) {
   for (let [cmd, lockfile] of lockfileSpecs) {
     const lockfilePath = join(currentDir, lockfile);
@@ -66,11 +72,10 @@ if (!YARNHOOK_BYPASS) {
         );
       } else {
         console.log(`Changes to lockfile found, running \`${cmd} install\``);
-
         try {
-          execa.sync(CMD, ["install"], { stdio: "inherit" });
+          execa.sync(CMD, args[cmd], { stdio: "inherit" });
         } catch (err) {
-          console.warn(`Running ${CMD} install failed`);
+          console.warn(`Running ${CMD} ${args[cmd].join(' ')} failed`);
         }
       }
     }
