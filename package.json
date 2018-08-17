@@ -7,6 +7,7 @@
   "author": "Fatih Altinok <photonia@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@lerna/project": "^3.0.0",
     "execa": "^0.8.0",
     "find-parent-dir": "^0.3.0"
   },
