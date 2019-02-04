@@ -20,7 +20,7 @@ const lockfileSpecs = [
 
 const args = {
   yarn: ["install", "--prefer-offline", "--pure-lockfile"],
-  npm: ["install", "--prefer-offline", "--no-audit"],
+  npm: ["install", "--prefer-offline", "--no-audit", "--no-save"],
   pnpm: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap"]
 };
 
