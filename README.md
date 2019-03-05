@@ -14,7 +14,7 @@ yarn add --dev yarnhook husky
 # or
 npm install --save-dev yarnhook husky
 # or
-pnpm install --save-dev yarnhook rusty
+pnpm install --save-dev yarnhook husky
 ```
 
 # Usage
@@ -24,11 +24,13 @@ as follows:
 
 ```json
 {
-  "scripts": {
-    "postmerge": "yarnhook",
-    "postcheckout": "yarnhook",
-    "postrewrite": "yarnhook"
-  }
+  "husky": {
+    "hooks": {
+      "post-checkout": "yarnhook",
+      "post-merge": "yarnhook",
+      "post-rewrite": "yarnhook"
+    }
+  },
 }
 ```
 
