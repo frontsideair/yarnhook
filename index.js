@@ -15,7 +15,8 @@ const lockfileSpecs = [
   ["yarn", "yarn.lock"],
   ["npm", "npm-shrinkwrap.json"],
   ["npm", "package-lock.json"],
-  ["pnpm", "shrinkwrap.yaml"]
+  ["pnpm", "shrinkwrap.yaml"],
+  ["pnpm", "pnpm-lock.yaml"]
 ];
 
 const args = {
