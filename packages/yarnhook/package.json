@@ -1,0 +1,22 @@
+{
+  "name": "yarnhook",
+  "version": "0.4.3",
+  "description": "Run `yarn install`, `npm install` or `pnpm install` on git hooks automatically",
+  "keywords": ["npm", "yarn", "githooks"],
+  "author": "Fatih Altinok <photonia@gmail.com>",
+  "homepage": "https://github.com/frontsideair/yarnhook/tree/main/packages/yarnhook#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "files": ["index.js"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frontsideair/yarnhook.git"
+  },
+  "bugs": {
+    "url": "https://github.com/frontsideair/yarnhook/issues"
+  },
+  "dependencies": {
+    "execa": "^0.8.0",
+    "find-parent-dir": "^0.3.0"
+  }
+}

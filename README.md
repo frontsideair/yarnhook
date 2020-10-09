@@ -5,7 +5,15 @@
 `yarnhook` keeps your `node_modules` up-to-date when your `yarn.lock`, `package-lock.json` or
 `shrinkwrap.yaml` changes due to git operations like `checkout`, `merge`, `rebase`, `pull` etc.
 
-# Installation
+# Easy installation
+
+You can install `yarnhook` to your project with [mrm](https://mrm.js.org/).
+
+```sh
+npx mrm yarnhook
+```
+
+# Manual installation
 
 This package should be used with [husky](https://www.npmjs.com/package/husky).
 
@@ -17,7 +25,7 @@ npm install --save-dev yarnhook husky
 pnpm install --save-dev yarnhook husky
 ```
 
-# Usage
+## Configuration
 
 You should let `yarnhook` handle git hooks that change the dependencies. Example `package.json` is
 as follows:
@@ -30,7 +38,7 @@ as follows:
       "post-merge": "yarnhook",
       "post-rewrite": "yarnhook"
     }
-  },
+  }
 }
 ```
 
