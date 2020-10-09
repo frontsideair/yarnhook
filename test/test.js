@@ -25,7 +25,7 @@ function cmd(command) {
 }
 
 async function initialize() {
-  await cmd("git init");
+  await cmd("git init -b main");
   await cmd("npm init --yes");
   await cmd("npm install --save-dev yarnhook husky");
   await cmd(
@@ -50,7 +50,7 @@ const TIMEOUT = 60 * 1000;
 beforeAll(initialize, TIMEOUT);
 afterAll(cleanup, TIMEOUT);
 beforeEach(async () => {
-  await cmd("git checkout master");
+  await cmd("git checkout main");
 });
 
 describe("tests", async () => {
