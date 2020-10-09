@@ -25,8 +25,9 @@ const MAIN_BRANCH = "main";
 const TIMEOUT = 60 * 1000;
 const TEST_DIRECTORY = "test";
 
-function cmd(command, cwd = TEST_DIRECTORY) {
-  return execa.shell(command, { cwd });
+async function cmd(command, cwd = TEST_DIRECTORY) {
+  const { stdout } = await execa.shell(command, { cwd });
+  return stdout;
 }
 
 async function installYarnhook() {
@@ -36,13 +37,13 @@ async function installYarnhook() {
   );
 }
 
-// dependencies: git 2.28, npm with npx
+// dependencies: git (2.28), npx (node 8.2.0)
 async function initialize() {
   await cmd(`mkdir ${TEST_DIRECTORY}`, ".");
   await cmd(`git init -b ${MAIN_BRANCH}`);
   await cmd("npm init --yes");
   await installYarnhook();
-  await cmd(`echo "console.log(0)" > index.js`);
+  await cmd(`echo "console.log(1)" > index.js`);
   await cmd("git add package.json package-lock.json index.js");
   await cmd(`git commit -m "Initial commit"`);
   await cmd(`git checkout -b ${NEW_BRANCH}`);
@@ -66,13 +67,13 @@ beforeEach(async () => {
 
 describe("simple test", () => {
   it("should work on main branch", async () => {
-    const { stdout: output } = await cmd("node index.js");
-    expect(output).toBe("0");
+    const output = await cmd("node index.js");
+    expect(output).toBe("1");
   });
 
   it("should work on new branch", async () => {
     await cmd(`git checkout ${NEW_BRANCH}`);
-    const { stdout: output } = await cmd("node index.js");
+    const output = await cmd("node index.js");
     expect(output).toBe("0");
   });
 });
