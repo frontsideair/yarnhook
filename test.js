@@ -46,13 +46,11 @@ beforeEach(async () => {
   await cmd(`npm ci`);
 });
 
-describe("simple test", () => {
-  it("should work on main branch", async () => {
+describe("smoke test", () => {
+  it("should ensure dependencies are up-to-date on branch change", async () => {
     const output = await cmd("node index.js");
     expect(output).toBe("1");
-  });
 
-  it("should work on new branch", async () => {
     await cmd(`git checkout ${NEW_BRANCH}`);
     const output = await cmd("node index.js");
     expect(output).toBe("0");
