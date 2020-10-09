@@ -1,23 +1,3 @@
-/*
-- checkout branch test
-- pull test
-- pull (rebase) test
-- npm, npm-shrinkwrap, yarn, pnpm tests
-- ???
-
-pull a yarnhook enabled repo
-change to a branch with a different dependency
-it should be installed
-change back to the initial branch
-it should be uninstalled
-
-start with an old HEAD
-perform a git pull
-it should have the latest dependencies
-
-it should work if pull.rebase=true
-*/
-
 const execa = require("execa");
 
 const NEW_BRANCH = "new-branch";
