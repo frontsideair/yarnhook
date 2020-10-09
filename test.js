@@ -48,11 +48,11 @@ beforeEach(async () => {
 
 describe("smoke test", () => {
   it("should ensure dependencies are up-to-date on branch change", async () => {
-    const output = await cmd("node index.js");
+    let output = await cmd("node index.js");
     expect(output).toBe("1");
 
     await cmd(`git checkout ${NEW_BRANCH}`);
-    const output = await cmd("node index.js");
+    output = await cmd("node index.js");
     expect(output).toBe("0");
   });
 });
