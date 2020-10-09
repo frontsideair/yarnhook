@@ -1,0 +1,22 @@
+{
+  "name": "mrm-task-yarnhook",
+  "version": "0.1.0",
+  "description": "Mrm task that adds yarnhook",
+  "keywords": ["yarnhook", "mrm", "mrm-task"],
+  "author": "Fatih Altinok <photonia@gmail.com>",
+  "homepage":
+    "https://github.com/frontsideair/yarnhook/tree/main/packages/mrm-task-yarnhook#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "files": ["index.js"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frontsideair/yarnhook.git"
+  },
+  "bugs": {
+    "url": "https://github.com/frontsideair/yarnhook/issues"
+  },
+  "dependencies": {
+    "mrm-core": "^4.1.2"
+  }
+}
