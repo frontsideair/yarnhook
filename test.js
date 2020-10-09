@@ -43,6 +43,7 @@ afterAll(cleanup, TIMEOUT);
 
 beforeEach(async () => {
   await cmd(`git checkout ${MAIN_BRANCH}`);
+  await cmd(`npm ci`);
 });
 
 describe("simple test", () => {
