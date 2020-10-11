@@ -6,7 +6,7 @@ const TIMEOUT = 60 * 1000;
 const TEST_DIRECTORY = "test";
 
 async function cmd(command, cwd = TEST_DIRECTORY) {
-  const { stdout } = await execa.shell(command, { cwd });
+  const { stdout } = await execa.command(command, { cwd, shell: true });
   return stdout;
 }
 

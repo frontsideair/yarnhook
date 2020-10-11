@@ -2,19 +2,24 @@
   "name": "yarnhook-monorepo",
   "private": true,
   "devDependencies": {
-    "flow-bin": "^0.61.0",
-    "husky": "^0.14.3",
+    "execa": "^4.0.3",
+    "flow-bin": "^0.135.0",
+    "husky": "^4.3.0",
     "jest": "^26.5.2",
     "lerna": "^3.22.1",
-    "lint-staged": "^6.0.0",
-    "prettier": "^1.9.2"
+    "lint-staged": "^10.4.0",
+    "prettier": "^2.1.2"
   },
   "scripts": {
-    "test": "jest",
-    "precommit": "lint-staged"
+    "test": "jest"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
-    "*.{js,json,css,md}": ["prettier --write", "git add"]
+    "*.{js,json,css,md}": "prettier --write"
   },
   "prettier": {
     "printWidth": 100,
