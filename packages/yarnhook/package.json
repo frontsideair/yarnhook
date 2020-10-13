@@ -1,6 +1,6 @@
 {
   "name": "yarnhook",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Run `yarn install`, `npm install` or `pnpm install` on git hooks automatically",
   "keywords": [
     "npm",
