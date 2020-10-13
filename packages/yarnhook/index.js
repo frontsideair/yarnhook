@@ -6,6 +6,7 @@ const findParentDir = require("find-parent-dir");
 const execa = require("execa");
 const { join } = require("path");
 const fs = require("fs");
+const packageJson = require("./package.json");
 
 // environment variables
 const { YARNHOOK_BYPASS = false, YARNHOOK_DEBUG = false, YARNHOOK_DRYRUN = false } = process.env;
@@ -76,15 +77,13 @@ if (!YARNHOOK_BYPASS) {
         try {
           execa.sync(cmd, args[cmd], { stdio: "inherit" });
         } catch (err) {
-          console.warn(`Running ${cmd} ${args[cmd].join(' ')} failed`);
+          console.warn(`Running ${cmd} ${args[cmd].join(" ")} failed`);
         }
       }
     }
   } else {
-    console.log(
-      "I can't seem to find a lockfile. Currently supported lockfiles are: yarn.lock, package-lock.json and shrinkwrap.yaml. Please " +
-        "open an issue at https://github.com/frontsideair/yarnhook/issues if " +
-        "you think it's my fault."
-    );
+    const lockfiles = lockfileSpecs.map(spec => spec[1]).join(", ");
+    console.warn(`I can't find a lockfile. Currently supported lockfiles are: ${lockfiles}.`);
+    console.warn(`Please open an issue at ${packageJson.bugs.url} if you think it's a bug.`);
   }
 }
