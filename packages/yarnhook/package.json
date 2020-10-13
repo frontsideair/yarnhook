@@ -10,7 +10,7 @@
   "author": "Fatih Altinok <photonia@gmail.com>",
   "homepage": "https://github.com/frontsideair/yarnhook/tree/main/packages/yarnhook#readme",
   "license": "MIT",
-  "main": "index.js",
+  "bin": "index.js",
   "files": [
     "index.js"
   ],
