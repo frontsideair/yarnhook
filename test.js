@@ -44,7 +44,7 @@ afterAll(cleanup, TIMEOUT);
 beforeEach(async () => {
   await cmd(`git checkout ${MAIN_BRANCH}`);
   await cmd(`npm ci`);
-});
+}, TIMEOUT);
 
 describe("smoke test", () => {
   it("should ensure dependencies are up-to-date on branch change", async () => {
