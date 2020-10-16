@@ -21,9 +21,9 @@ const lockfileSpecs = [
 ];
 
 const args = {
-  yarn: ["install", "--prefer-offline", "--pure-lockfile"],
-  npm: ["install", "--prefer-offline", "--no-audit", "--no-save"],
-  pnpm: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap"]
+  yarn: ["install", "--prefer-offline", "--pure-lockfile", "--ignore-optional"],
+  npm: ["install", "--prefer-offline", "--no-audit", "--no-save", "--no-optional"],
+  pnpm: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap", "--no-optional"]
 };
 
 function getLockfileSpec(currentDir) {
