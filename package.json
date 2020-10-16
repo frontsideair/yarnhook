@@ -11,11 +11,12 @@
     "prettier": "^2.1.2"
   },
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "test": "jest"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && flow"
     }
   },
   "lint-staged": {
