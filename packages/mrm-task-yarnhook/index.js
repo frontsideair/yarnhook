@@ -1,3 +1,5 @@
+// @flow
+
 const { install, packageJson } = require("mrm-core");
 
 function task() {
