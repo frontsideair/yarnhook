@@ -70,7 +70,7 @@ if (!YARNHOOK_BYPASS) {
     if (output.length > 0) {
       if (YARNHOOK_DRYRUN) {
         console.log(
-          `Changes to lockfile found, you should run \`${cmd} install\` if you want to have dependencies of this branch.`
+          `Changes to lockfile found, you should run \`${cmd} install\` if you want to have up-to-date dependencies.`
         );
       } else {
         console.log(`Changes to lockfile found, running \`${cmd} install\``);
