@@ -12,7 +12,8 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "husky": {
     "hooks": {
