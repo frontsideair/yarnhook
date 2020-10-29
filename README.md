@@ -34,8 +34,8 @@ as follows:
 {
   "husky": {
     "hooks": {
-      "post-checkout": "yarnhook",
-      "post-merge": "yarnhook"
+      "post-checkout": "yarnhook post-checkout $HUSKY_GIT_PARAMS",
+      "post-merge": "yarnhook post-merge $HUSKY_GIT_PARAMS"
     }
   }
 }
