@@ -23,9 +23,9 @@ async function remoteCmd(command) {
 }
 
 async function installYarnhook() {
-  await remoteCmd("npm install --save-dev --package-lock-only ../../packages/yarnhook husky");
+  await remoteCmd("npm install --save-dev --package-lock-only ../../packages/yarnhook 'husky@>=4'");
   await remoteCmd(
-    `npx json -I -f package.json -e 'this.husky={"hooks":{"post-checkout":"yarnhook $HUSKY_GIT_PARAMS","post-merge":"yarnhook $HUSKY_GIT_PARAMS","post-rewrite":"yarnhook $HUSKY_GIT_PARAMS"}}'`
+    `npx json -I -f package.json -e 'this.husky={"hooks":{"post-checkout":"yarnhook post-checkout $HUSKY_GIT_PARAMS","post-merge":"yarnhook post-merge $HUSKY_GIT_PARAMS"}}'`
   );
 }
 
@@ -53,16 +53,16 @@ beforeAll(initialize);
 
 afterAll(cleanup);
 
-beforeEach(async () => {
-  await cmd(`git clone ${REMOTE_REPO_PATH} ${LOCAL_REPO_PATH} --branch=${MAIN_BRANCH}`);
-  await localCmd("npm ci");
-});
-
 afterEach(async () => {
   await cmd(`rm -rf ${LOCAL_REPO_PATH}`);
 });
 
-describe("smoke test", () => {
+describe("checkout test", () => {
+  beforeEach(async () => {
+    await cmd(`git clone ${REMOTE_REPO_PATH} ${LOCAL_REPO_PATH} --branch=${MAIN_BRANCH}`);
+    await localCmd("npm ci");
+  });
+
   it("should ensure dependencies are up-to-date on branch change", async () => {
     await expect(localCmd("node index.js")).resolves.toBe("1");
 
@@ -70,7 +70,38 @@ describe("smoke test", () => {
     await expect(localCmd("node index.js")).resolves.toBe("0");
   });
 
+  it("should work from a subdirectory", async () => {
+    const subdirectory = path.join(LOCAL_REPO_PATH, "subdirectory");
+    await cmd(`mkdir ${subdirectory}`);
+    await expect(localCmd("node index.js")).resolves.toBe("1");
+
+    await cmd(`git checkout ${NEW_BRANCH}`, subdirectory);
+    await expect(localCmd("node index.js")).resolves.toBe("0");
+  });
+
   it("should not fail when the first non-branch-changing checkout is done", async () => {
     await expect(localCmd("git checkout")).resolves.toBeDefined();
+  });
+});
+
+describe("pull test", () => {
+  beforeEach(async () => {
+    await cmd(`git clone ${REMOTE_REPO_PATH} ${LOCAL_REPO_PATH} --branch=${NEW_BRANCH}`);
+    await localCmd(`git reset --hard HEAD~`);
+    await localCmd("npm ci");
+  });
+
+  it("should ensure dependencies are up-to-date on pull (merge)", async () => {
+    await expect(localCmd("node index.js")).resolves.toBe("1");
+
+    console.log(await localCmd("git pull --rebase=false"));
+    await expect(localCmd("node index.js")).resolves.toBe("0");
+  });
+
+  it("should ensure dependencies are up-to-date on pull (rebase)", async () => {
+    await expect(localCmd("node index.js")).resolves.toBe("1");
+
+    console.log(await localCmd("git pull --rebase=true"));
+    await expect(localCmd("node index.js")).resolves.toBe("0");
   });
 });

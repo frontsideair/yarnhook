@@ -35,8 +35,7 @@ as follows:
   "husky": {
     "hooks": {
       "post-checkout": "yarnhook",
-      "post-merge": "yarnhook",
-      "post-rewrite": "yarnhook"
+      "post-merge": "yarnhook"
     }
   }
 }
@@ -46,9 +45,9 @@ as follows:
 
 Prepend these flags to your git command to use them.
 
-* `YARNHOOK_BYPASS`: Run git command bypassing yarnhook completely
-* `YARNHOOK_DEBUG`: Print debug information
-* `YARNHOOK_DRYRUN`: Don't install dependencies, only notify
+- `YARNHOOK_BYPASS`: Run git command bypassing yarnhook completely
+- `YARNHOOK_DEBUG`: Print debug information
+- `YARNHOOK_DRYRUN`: Don't install dependencies, only notify
 
 An example:
 
