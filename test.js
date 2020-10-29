@@ -57,7 +57,7 @@ afterEach(async () => {
   await cmd(`rm -rf ${LOCAL_REPO_PATH}`);
 });
 
-describe("checkout test", () => {
+describe("branch checkout/switch test", () => {
   beforeEach(async () => {
     await cmd(`git clone ${REMOTE_REPO_PATH} ${LOCAL_REPO_PATH} --branch=${MAIN_BRANCH}`);
     await localCmd("npm ci");
@@ -82,6 +82,13 @@ describe("checkout test", () => {
   it("should not fail when the first non-branch-changing checkout is done", async () => {
     await expect(localCmd("git checkout")).resolves.toBeDefined();
   });
+
+  it("should work with switch command", async () => {
+    await expect(localCmd("node index.js")).resolves.toBe("1");
+
+    await localCmd(`git switch ${NEW_BRANCH}`);
+    await expect(localCmd("node index.js")).resolves.toBe("0");
+  });
 });
 
 describe("pull test", () => {
@@ -94,14 +101,14 @@ describe("pull test", () => {
   it("should ensure dependencies are up-to-date on pull (merge)", async () => {
     await expect(localCmd("node index.js")).resolves.toBe("1");
 
-    console.log(await localCmd("git pull --rebase=false"));
+    await localCmd("git pull --rebase=false");
     await expect(localCmd("node index.js")).resolves.toBe("0");
   });
 
   it("should ensure dependencies are up-to-date on pull (rebase)", async () => {
     await expect(localCmd("node index.js")).resolves.toBe("1");
 
-    console.log(await localCmd("git pull --rebase=true"));
+    await localCmd("git pull --rebase=true");
     await expect(localCmd("node index.js")).resolves.toBe("0");
   });
 });
