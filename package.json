@@ -12,6 +12,7 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
+    "flow": "flow",
     "test": "jest",
     "test:watch": "jest --watch"
   },

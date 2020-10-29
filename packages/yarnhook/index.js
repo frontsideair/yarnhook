@@ -2,22 +2,20 @@
 
 // @flow
 
-const findParentDir = require("find-parent-dir");
 const execa = require("execa");
-const { join } = require("path");
 const fs = require("fs");
 const packageJson = require("./package.json");
 
 // environment variables
-const { YARNHOOK_BYPASS = false, YARNHOOK_DEBUG = false, YARNHOOK_DRYRUN = false } = process.env;
+const { YARNHOOK_BYPASS, YARNHOOK_DEBUG, YARNHOOK_DRYRUN } = process.env;
 
 // supported package managers and lockfile names
 const lockfileSpecs = [
-  ["yarn", "yarn.lock"],
-  ["npm", "npm-shrinkwrap.json"],
-  ["npm", "package-lock.json"],
-  ["pnpm", "shrinkwrap.yaml"],
-  ["pnpm", "pnpm-lock.yaml"]
+  { command: "yarn", lockfile: "yarn.lock" },
+  { command: "npm", lockfile: "npm-shrinkwrap.json" },
+  { command: "npm", lockfile: "package-lock.json" },
+  { command: "pnpm", lockfile: "shrinkwrap.yaml" },
+  { command: "pnpm", lockfile: "pnpm-lock.yaml" }
 ];
 
 const args = {
@@ -26,64 +24,93 @@ const args = {
   pnpm: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap", "--no-optional"]
 };
 
-function getLockfileSpec(currentDir) {
-  for (let [cmd, lockfile] of lockfileSpecs) {
-    const lockfilePath = join(currentDir, lockfile);
-    if (fs.existsSync(lockfilePath)) {
-      return { cmd, lockfilePath };
+function getLockfileSpec() {
+  for (const lockfileSpec of lockfileSpecs) {
+    if (fs.existsSync(lockfileSpec.lockfile)) {
+      return lockfileSpec;
     }
   }
-
-  return null;
 }
 
-if (!YARNHOOK_BYPASS) {
-  // find directories
-  const currentDir = process.cwd();
-  const gitDir = findParentDir.sync(currentDir, ".git");
-
-  // check for lockfiles
-  const lockfileSpec = getLockfileSpec(currentDir);
-
-  if (YARNHOOK_DEBUG) {
-    console.log("currentDir:", currentDir);
-    console.log("gitDir:", gitDir);
-    console.log("lockfile:", lockfileSpec);
+function diff(hook, gitParams, lockfilePath) {
+  let range;
+  switch (hook) {
+    // Triggered by: checkout, switch, rebase, pull (rebase)
+    // See: https://git-scm.com/docs/githooks#_post_checkout
+    // NOTE: git-rebase has two backends: apply and merge. Both backends call
+    // post-checkout hook, although merge backend doesn't show the output.
+    // This behavior may change in the future, but for now it's the only way
+    // to do this since we don't want to run it twice on `git pull --rebase`.
+    // Read more: https://git-scm.com/docs/git-rebase#_hooks
+    case "post-checkout":
+      const [previousHead, currentHead, isBranchCheckout] = gitParams;
+      range = `${previousHead}..${currentHead}`;
+      break;
+    // Triggered by: merge, pull (merge)
+    // See: https://git-scm.com/docs/githooks#_post_merge
+    case "post-merge":
+      const [isSquash] = gitParams;
+      range = "HEAD@{1}..HEAD@{0}";
+      break;
+    default:
+      // backwards compatibility or fail
+      process.exit(1);
   }
+  const gitDiffParams = ["diff", "--name-only", range, "--", lockfilePath];
+  debug("Running `git diff` with params:", gitDiffParams);
+  const { stdout: output } = execa.sync("git", gitDiffParams);
+  return output;
+}
 
-  if (lockfileSpec !== null) {
-    // get the command and lockfile path
-    const { cmd, lockfilePath } = lockfileSpec;
+function debug(...args) {
+  if (YARNHOOK_DEBUG) {
+    console.log("YARNHOOK:", ...args);
+  }
+}
 
-    // run a git diff on the lockfile
-    const { stdout: output } = execa.sync(
-      "git",
-      ["diff", "HEAD@{1}..HEAD@{0}", "--", lockfilePath],
-      { cwd: gitDir }
-    );
+function log(...args) {
+  console.log(...args);
+}
 
-    if (YARNHOOK_DEBUG) {
-      console.log(output);
-    }
+function error(...args) {
+  console.error(...args);
+}
 
-    // if diff exists, update dependencies
-    if (output.length > 0) {
-      if (YARNHOOK_DRYRUN) {
-        console.log(
-          `Changes to lockfile found, you should run \`${cmd} install\` if you want to have up-to-date dependencies.`
-        );
-      } else {
-        console.log(`Changes to lockfile found, running \`${cmd} install\``);
-        try {
-          execa.sync(cmd, args[cmd], { stdio: "inherit" });
-        } catch (err) {
-          console.warn(`Running ${cmd} ${args[cmd].join(" ")} failed`);
+function main() {
+  if (!YARNHOOK_BYPASS) {
+    const [, , hook, ...gitParams] = process.argv;
+    debug(`Running on ${hook} hook with params:`, gitParams);
+    const lockfileSpec = getLockfileSpec();
+    if (lockfileSpec) {
+      const { command, lockfile } = lockfileSpec;
+      debug(`Lockfile ${lockfile} detected, inferring package manager ${command}.`);
+      const output = diff(hook, gitParams, lockfile);
+      if (output.length > 0) {
+        if (YARNHOOK_DRYRUN) {
+          log(
+            `Changes to ${lockfile} found, you should use ${command} to have up-to-date dependencies.`
+          );
+        } else {
+          log(`Changes to ${lockfile} found, installing dependencies with ${command}`);
+          try {
+            execa.sync(command, args[command], { stdio: "inherit" });
+          } catch (err) {
+            error(`Running ${command} ${args[command].join(" ")} failed.`);
+          }
         }
+      } else {
+        debug(`No changes were found to the lockfile ${lockfile}:`, output);
       }
+    } else {
+      const lockfiles = lockfileSpecs.map(spec => spec.lockfile).join(", ");
+      error(
+        `No known lockfiles in ${process.cwd()}. Currently supported lockfiles are: ${lockfiles}.`
+      );
+      error(`Please open an issue at ${packageJson.bugs.url} if you think it's a bug.`);
     }
   } else {
-    const lockfiles = lockfileSpecs.map(spec => spec[1]).join(", ");
-    console.warn(`I can't find a lockfile. Currently supported lockfiles are: ${lockfiles}.`);
-    console.warn(`Please open an issue at ${packageJson.bugs.url} if you think it's a bug.`);
+    debug(`Not running since YARNHOOK_BYPASS flag was on.`);
   }
 }
+
+main();

@@ -22,7 +22,6 @@
     "url": "https://github.com/frontsideair/yarnhook/issues"
   },
   "dependencies": {
-    "execa": "^4.0.3",
-    "find-parent-dir": "^0.3.0"
+    "execa": "^4.0.3"
   }
 }
