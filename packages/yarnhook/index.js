@@ -13,6 +13,7 @@ const { YARNHOOK_BYPASS = false, YARNHOOK_DEBUG = false, YARNHOOK_DRYRUN = false
 
 // supported package managers and lockfile names
 const lockfileSpecs = [
+  ["yarn2", ".yarnrc.yml"],
   ["yarn", "yarn.lock"],
   ["npm", "npm-shrinkwrap.json"],
   ["npm", "package-lock.json"],
@@ -21,16 +22,18 @@ const lockfileSpecs = [
 ];
 
 const args = {
-  yarn: ["install", "--prefer-offline", "--pure-lockfile", "--ignore-optional"],
-  npm: ["install", "--prefer-offline", "--no-audit", "--no-save", "--no-optional"],
-  pnpm: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap", "--no-optional"]
+  yarn2: ["yarn", ["install", "--immutable"]],
+  yarn: ["yarn", ["install", "--prefer-offline", "--pure-lockfile", "--ignore-optional"]],
+  npm: ["npm", ["install", "--prefer-offline", "--no-audit", "--no-save", "--no-optional"]],
+  pnpm: ["pnpm", ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap", "--no-optional"]]
 };
 
 function getLockfileSpec(currentDir) {
-  for (let [cmd, lockfile] of lockfileSpecs) {
+  for (let [pm, lockfile] of lockfileSpecs) {
     const lockfilePath = join(currentDir, lockfile);
     if (fs.existsSync(lockfilePath)) {
-      return { cmd, lockfilePath };
+      const [cmd, arg] = args[pm];
+      return { cmd, arg, lockfilePath };
     }
   }
 
@@ -53,7 +56,7 @@ if (!YARNHOOK_BYPASS) {
 
   if (lockfileSpec !== null) {
     // get the command and lockfile path
-    const { cmd, lockfilePath } = lockfileSpec;
+    const { cmd, arg, lockfilePath } = lockfileSpec;
 
     // run a git diff on the lockfile
     const { stdout: output } = execa.sync(
@@ -75,7 +78,7 @@ if (!YARNHOOK_BYPASS) {
       } else {
         console.log(`Changes to lockfile found, running \`${cmd} install\``);
         try {
-          execa.sync(cmd, args[cmd], { stdio: "inherit" });
+          execa.sync(cmd, arg, { stdio: "inherit" });
         } catch (err) {
           console.warn(`Running ${cmd} ${args[cmd].join(" ")} failed`);
         }
