@@ -1,6 +1,6 @@
 {
   "name": "yarnhook",
-  "version": "0.4.3",
+  "version": "0.5.0-0",
   "bin": "index.js",
   "files": ["index.js"],
   "repository": "frontsideair/yarnhook",
