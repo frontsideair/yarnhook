@@ -11,22 +11,53 @@ const { YARNHOOK_BYPASS, YARNHOOK_DEBUG, YARNHOOK_DRYRUN } = process.env;
 
 // supported package managers and lockfile names
 const lockfileSpecs = [
-  { command: "yarn", lockfile: "yarn.lock" },
-  { command: "npm", lockfile: "npm-shrinkwrap.json" },
-  { command: "npm", lockfile: "package-lock.json" },
-  { command: "pnpm", lockfile: "shrinkwrap.yaml" },
-  { command: "pnpm", lockfile: "pnpm-lock.yaml" }
+  {
+    checkfile: ".yarnrc.yml",
+    lockfile: "yarn.lock",
+    command: "yarn",
+    version: "2",
+    arguments: ["install", "--immutable"]
+  },
+  {
+    checkfile: "yarn.lock",
+    lockfile: "yarn.lock",
+    command: "yarn",
+    version: "1",
+    arguments: ["install", "--prefer-offline", "--pure-lockfile", "--ignore-optional"]
+  },
+  {
+    checkfile: "package-lock.json",
+    lockfile: "package-lock.json",
+    command: "npm",
+    version: ">=5",
+    arguments: ["install", "--prefer-offline", "--no-audit", "--no-save", "--no-optional"]
+  },
+  {
+    checkfile: "npm-shrinkwrap.json",
+    lockfile: "npm-shrinkwrap.json",
+    command: "npm",
+    version: "<5",
+    arguments: ["install", "--prefer-offline", "--no-audit", "--no-save", "--no-optional"]
+  },
+  {
+    checkfile: "pnpm-lock.yaml",
+    lockfile: "pnpm-lock.yaml",
+    command: "pnpm",
+    version: ">=3",
+    arguments: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap", "--no-optional"]
+  },
+  {
+    checkfile: "shrinkwrap.yaml",
+    lockfile: "shrinkwrap.yaml",
+    command: "pnpm",
+    version: "<3",
+    arguments: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap", "--no-optional"]
+  }
 ];
-
-const args = {
-  yarn: ["install", "--prefer-offline", "--pure-lockfile", "--ignore-optional"],
-  npm: ["install", "--prefer-offline", "--no-audit", "--no-save", "--no-optional"],
-  pnpm: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap", "--no-optional"]
-};
 
 function getLockfileSpec() {
   for (const lockfileSpec of lockfileSpecs) {
-    if (fs.existsSync(lockfileSpec.lockfile)) {
+    if (fs.existsSync(lockfileSpec.checkfile)) {
       return lockfileSpec;
     }
   }
@@ -82,7 +113,7 @@ function main() {
     debug(`Running on ${hook} hook with params:`, gitParams);
     const lockfileSpec = getLockfileSpec();
     if (lockfileSpec) {
-      const { command, lockfile } = lockfileSpec;
+      const { lockfile, command, arguments } = lockfileSpec;
       debug(`Lockfile ${lockfile} detected, inferring package manager ${command}.`);
       const output = diff(hook, gitParams, lockfile);
       if (output.length > 0) {
@@ -93,9 +124,9 @@ function main() {
         } else {
           log(`Changes to ${lockfile} found, installing dependencies with ${command}`);
           try {
-            execa.sync(command, args[command], { stdio: "inherit" });
+            execa.sync(command, arguments, { stdio: "inherit" });
           } catch (err) {
-            error(`Running ${command} ${args[command].join(" ")} failed.`);
+            error(`Running ${command} ${arguments.join(" ")} failed.`);
           }
         }
       } else {
