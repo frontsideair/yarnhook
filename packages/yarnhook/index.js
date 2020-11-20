@@ -107,6 +107,10 @@ function error(...args) {
   console.error(...args);
 }
 
+function stringifyLockfileSpec({ command, version, checkfile, lockfile }) {
+  return `Package manager: ${command}\nVersion: ${version}\nCheckfile: ${checkfile}\nLockfile: ${lockfile}`;
+}
+
 function main() {
   if (!YARNHOOK_BYPASS) {
     const [, , hook, ...gitParams] = process.argv;
@@ -133,10 +137,8 @@ function main() {
         debug(`No changes were found to the lockfile ${lockfile}:`, output);
       }
     } else {
-      const lockfiles = lockfileSpecs.map(spec => spec.lockfile).join(", ");
-      error(
-        `No known lockfiles in ${process.cwd()}. Currently supported lockfiles are: ${lockfiles}.`
-      );
+      const specs = lockfileSpecs.map(stringifyLockfileSpec).join("\n\n");
+      error(`No package manager detected. Currently supported package managers are:\n\n${specs}.`);
       error(`Please open an issue at ${packageJson.bugs.url} if you think it's a bug.`);
     }
   } else {
