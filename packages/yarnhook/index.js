@@ -117,8 +117,8 @@ function main() {
     debug(`Running on ${hook} hook with params:`, gitParams);
     const lockfileSpec = getLockfileSpec();
     if (lockfileSpec) {
-      const { lockfile, command, arguments } = lockfileSpec;
-      debug(`Lockfile ${lockfile} detected, inferring package manager ${command}.`);
+      const { checkfile, lockfile, command, arguments } = lockfileSpec;
+      debug(`Checkfile ${checkfile} detected, inferring package manager ${command}.`);
       const output = diff(hook, gitParams, lockfile);
       if (output.length > 0) {
         if (YARNHOOK_DRYRUN) {
