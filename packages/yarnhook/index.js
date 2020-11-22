@@ -122,11 +122,9 @@ function main() {
       const output = diff(hook, gitParams, lockfile);
       if (output.length > 0) {
         if (YARNHOOK_DRYRUN) {
-          log(
-            `Changes to ${lockfile} found, you should use ${command} to have up-to-date dependencies.`
-          );
+          log(`Changes to ${lockfile} found, you should use ${command} to install dependencies.`);
         } else {
-          log(`Changes to ${lockfile} found, installing dependencies with ${command}`);
+          log(`Changes to ${lockfile} found, installing dependencies with ${command}.`);
           try {
             execa.sync(command, arguments, { stdio: "inherit" });
           } catch (err) {
@@ -134,7 +132,7 @@ function main() {
           }
         }
       } else {
-        debug(`No changes were found to the lockfile ${lockfile}:`, output);
+        debug(`No changes were found to the lockfile ${lockfile}.`);
       }
     } else {
       const specs = lockfileSpecs.map(stringifyLockfileSpec).join("\n\n");
