@@ -46,7 +46,7 @@ const lockfileSpecs = [
     lockfile: "pnpm-lock.yaml",
     command: "pnpm",
     version: ">=3",
-    arguments: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap", "--no-optional"]
+    arguments: ["install", "--prefer-offline", "--prefer-frozen-lockfile", "--no-optional"]
   },
   {
     checkfile: "shrinkwrap.yaml",
