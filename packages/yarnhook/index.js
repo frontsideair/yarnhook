@@ -25,35 +25,35 @@ const lockfileSpecs = [
     lockfile: "yarn.lock",
     command: "yarn",
     version: "1",
-    arguments: ["install", "--prefer-offline", "--pure-lockfile", "--ignore-optional"]
+    arguments: ["install", "--prefer-offline", "--pure-lockfile"]
   },
   {
     checkfile: "package-lock.json",
     lockfile: "package-lock.json",
     command: "npm",
     version: ">=5",
-    arguments: ["install", "--prefer-offline", "--no-audit", "--no-save", "--no-optional"]
+    arguments: ["install", "--prefer-offline", "--no-audit", "--no-save"]
   },
   {
     checkfile: "npm-shrinkwrap.json",
     lockfile: "npm-shrinkwrap.json",
     command: "npm",
     version: "<5",
-    arguments: ["install", "--prefer-offline", "--no-audit", "--no-save", "--no-optional"]
+    arguments: ["install", "--prefer-offline", "--no-audit", "--no-save"]
   },
   {
     checkfile: "pnpm-lock.yaml",
     lockfile: "pnpm-lock.yaml",
     command: "pnpm",
     version: ">=3",
-    arguments: ["install", "--prefer-offline", "--prefer-frozen-lockfile", "--no-optional"]
+    arguments: ["install", "--prefer-offline", "--prefer-frozen-lockfile"]
   },
   {
     checkfile: "shrinkwrap.yaml",
     lockfile: "shrinkwrap.yaml",
     command: "pnpm",
     version: "<3",
-    arguments: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap", "--no-optional"]
+    arguments: ["install", "--prefer-offline", "--prefer-frozen-shrinkwrap"]
   }
 ];
 
