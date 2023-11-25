@@ -14,6 +14,13 @@ const { YARNHOOK_BYPASS = false, YARNHOOK_DEBUG = false, YARNHOOK_DRYRUN = false
 // supported package managers and lockfile names
 const lockfileSpecs = [
   {
+    checkfile: "bun.lockb",
+    lockfile: "bun.lockb",
+    command: "bun",
+    version: "1",
+    arguments: ["install", "--frozen-lockfile "]
+  },
+  {
     checkfile: ".yarnrc.yml",
     lockfile: "yarn.lock",
     command: "yarn",
