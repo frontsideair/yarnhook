@@ -23,6 +23,6 @@
   },
   "dependencies": {
     "execa": "^4.0.3",
-    "find-parent-dir": "^0.3.0"
+    "find-parent-dir": "^0.3.1"
   }
 }
